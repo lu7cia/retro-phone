@@ -1,0 +1,82 @@
+/* SHEER concept art: shared styles for the generated SVGs (design/art.py).
+   Colorways are plain CSS variables on [data-cw]; everything in the art reads them. */
+
+.phone {
+  --ink: #17123b;
+  --gold-1: #f4d27a;
+  --gold-2: #c4902b;
+  --chip: #1a1b25;
+  --chip-hi: #3b3d4d;
+  --metal-1: #f3f5f9;
+  --metal-2: #8f99aa;
+  --flex: #d89a3c;
+  --batt-1: #ffd23f;
+  --batt-2: #f0a61a;
+  --label: #fffdf2;
+  --font-ui-display: var(--font-display, "Unbounded", "Arial Black", "Helvetica Neue", Arial, sans-serif);
+  --font-ui-mono: var(--font-mono, "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace);
+}
+
+[data-cw="ice"] {
+  --shell: #2f9cf0; --shell-deep: #0a58b8; --shell-light: #b6e5ff; --glow: #3eb0ff;
+  --pcb: #2d63d8; --pcb-deep: #1a3f9e; --led: #ff54d6;
+  --ta0: .66; --ta1: .46; --ta2: .62; --key-a: .78;
+}
+[data-cw="grape"] {
+  --shell: #7c4dff; --shell-deep: #3a1aa8; --shell-light: #d6c8ff; --glow: #9068ff;
+  --pcb: #6b3fe0; --pcb-deep: #3f1fa5; --led: #58ffd3;
+  --ta0: .66; --ta1: .48; --ta2: .64; --key-a: .78;
+}
+[data-cw="kiwi"] {
+  --shell: #9be21b; --shell-deep: #4f8a00; --shell-light: #ecffa6; --glow: #b6f23c;
+  --pcb: #4fae1a; --pcb-deep: #2f7a08; --led: #ff5fa8;
+  --ta0: .68; --ta1: .5; --ta2: .64; --key-a: .8;
+}
+[data-cw="gum"] {
+  --shell: #ff3fa8; --shell-deep: #a80f5e; --shell-light: #ffc9ea; --glow: #ff6cc0;
+  --pcb: #d6288a; --pcb-deep: #8f1560; --led: #6fe8ff;
+  --ta0: .66; --ta1: .46; --ta2: .62; --key-a: .78;
+}
+[data-cw="ghost"] {
+  --shell: #cfe3f1; --shell-deep: #6f8aa0; --shell-light: #ffffff; --glow: #b9cfdd;
+  --pcb: #2a2f3a; --pcb-deep: #14171e; --led: #ffe14f;
+  --ta0: .24; --ta1: .10; --ta2: .26; --key-a: .5;
+}
+
+/* gradient stops (kept in CSS so the colorway can change live) */
+.s-sh0 { stop-color: var(--shell-light); stop-opacity: var(--ta0); }
+.s-sh1 { stop-color: var(--shell);       stop-opacity: var(--ta1); }
+.s-sh2 { stop-color: var(--shell-deep);  stop-opacity: var(--ta2); }
+.s-key0 { stop-color: var(--shell-light); stop-opacity: .95; }
+.s-key1 { stop-color: var(--shell);       stop-opacity: var(--key-a); }
+.s-pcb0 { stop-color: var(--pcb); }
+.s-pcb1 { stop-color: var(--pcb-deep); }
+
+.f-shell  { fill: var(--shell); }
+.f-light  { fill: var(--shell-light); }
+.f-deep   { fill: var(--shell-deep); }
+.f-glow   { fill: var(--glow); }
+.f-led    { fill: var(--led); }
+.f-ink    { fill: var(--ink); }
+.k-deep   { stroke: var(--shell-deep); }
+.k-light  { stroke: var(--shell-light); }
+
+.t-disp { font-family: var(--font-ui-display); font-weight: 700; }
+.t-mono { font-family: var(--font-ui-mono); font-weight: 500; }
+.legend { font-family: var(--font-ui-mono); font-weight: 500; fill: var(--ink); fill-opacity: .82;
+          text-anchor: middle; dominant-baseline: central; font-size: 3px; }
+
+/* exploded stack: each layer slides along --gap; JS flips --gap between assembled and exploded */
+.exploded { --gap: 34; }
+.exploded .xl { transform: translateY(calc(var(--i) * var(--gap) * 1px)); transition: transform .8s cubic-bezier(.2,.8,.2,1), opacity .3s; cursor: pointer; outline: none; }
+.exploded.is-flat { --gap: 3; }
+
+/* exploded labels (art sits on a fixed pastel "photo" backdrop, so label colours are fixed too) */
+.exploded .xl-lead { stroke: #17123b; stroke-opacity: .45; stroke-width: .35; stroke-dasharray: 1.2 1.2; }
+.exploded .xl-dot  { fill: #17123b; fill-opacity: .85; }
+.exploded .xl-t { font-family: var(--font-ui-display); font-weight: 700; font-size: 5.2px; fill: #17123b; letter-spacing: .15px; }
+.exploded .xl-s { font-family: var(--font-ui-mono); font-weight: 500; font-size: 3.5px; fill: #17123b; fill-opacity: .72; }
+.exploded.has-pick .xl { opacity: .26; }
+.exploded.has-pick .xl.is-pick { opacity: 1; }
+.exploded .xl:hover .xl-t, .exploded .xl:focus-visible .xl-t { text-decoration: underline; }
+.exploded .xl:focus-visible .xl-dot { r: 2.4px; }

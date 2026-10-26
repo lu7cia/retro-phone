@@ -1,0 +1,719 @@
+<title>Sheer Phone</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=Unbounded:wght@600;700;800&display=swap">
+<style>
+/* SHEER: Y2K product sheet.
+   Layout concept: pastel "photo" stages (like the see-through-tech flat-lays) float on a quiet page;
+   the plan below is a checklist that always shows ONE next thing. Colorway = page accent. */
+:root {
+  --font-display: "Unbounded", "Arial Black", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --bg: #F3F0FD;
+  --surface: #FFFFFF;
+  --surface-2: #EAE5FB;
+  --fg: #17123B;
+  --muted: #57528A;
+  --line: rgba(23, 18, 59, .14);
+  --link: #2B47D6;
+  --ok: #0B7A4B;     --ok-bg: #D5F4E4;
+  --warn: #7C5200;   --warn-bg: #FFE9B8;
+  --bad: #A8143F;    --bad-bg: #FFD6E4;
+  --info: #1B45C4;   --info-bg: #DCE6FF;
+
+  /* the "photo" stages stay pastel in both themes */
+  --stage: #E4DEFA;
+  --stage-ink: #17123B;
+
+  --accent: #2F9CF0;
+  --on-accent: #04223F;
+  --radius: 18px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #100D2B; --surface: #1A1646; --surface-2: #261F5C; --fg: #EEEAFF; --muted: #B0ABDD;
+    --line: rgba(238, 234, 255, .17); --link: #A5BAFF;
+    --ok: #62E3A6; --ok-bg: #0E3A29; --warn: #FFCB63; --warn-bg: #3F2F08;
+    --bad: #FF93B4; --bad-bg: #4A1228; --info: #A3BDFF; --info-bg: #1A2B6B;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #100D2B; --surface: #1A1646; --surface-2: #261F5C; --fg: #EEEAFF; --muted: #B0ABDD;
+  --line: rgba(238, 234, 255, .17); --link: #A5BAFF;
+  --ok: #62E3A6; --ok-bg: #0E3A29; --warn: #FFCB63; --warn-bg: #3F2F08;
+  --bad: #FF93B4; --bad-bg: #4A1228; --info: #A3BDFF; --info-bg: #1A2B6B;
+  color-scheme: dark;
+}
+:root[data-cw="ice"]   { --accent: #2F9CF0; --on-accent: #04223F; }
+:root[data-cw="grape"] { --accent: #7C4DFF; --on-accent: #FFFFFF; }
+:root[data-cw="kiwi"]  { --accent: #9BE21B; --on-accent: #1D2B00; }
+:root[data-cw="gum"]   { --accent: #FF3FA8; --on-accent: #2A0618; }
+:root[data-cw="ghost"] { --accent: #B9CFDD; --on-accent: #10202C; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 400 1.0625rem/1.6 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 72px;
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+.wrap { max-width: 1120px; margin-inline: auto; }
+h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.08; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+p { margin: 0; text-wrap: pretty; }
+a { color: var(--link); text-underline-offset: .18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.mono { font-family: var(--font-mono); }
+.eyebrow { font: 500 .74rem/1.2 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---- top bar + sticky next-up ---- */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 18px 12px; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font: 800 1.15rem/1 var(--font-display); letter-spacing: .14em; color: var(--fg); text-decoration: none; }
+.brand-mark { width: 26px; height: 34px; border-radius: 9px; background: linear-gradient(150deg, rgba(255,255,255,.85), var(--accent) 45%, rgba(0,0,0,.25)); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.55), 0 4px 14px color-mix(in srgb, var(--accent) 55%, transparent); }
+.top-meta { font: 500 .74rem/1.2 var(--font-mono); color: var(--muted); text-align: right; }
+.nextbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-block: 1px solid var(--line); }
+.nextbar-in { display: grid; grid-template-columns: auto minmax(0, 1fr) 96px auto; gap: 12px; align-items: center; padding-block: 9px; }
+.next-pill { font: 500 .7rem/1 var(--font-mono); letter-spacing: .1em; padding: 6px 9px; border-radius: 999px; background: var(--accent); color: var(--on-accent); }
+.next-text { min-width: 0; color: var(--fg); text-decoration: none; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.next-text:hover { text-decoration: underline; }
+.meter { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.meter-fill { display: block; height: 100%; width: 0%; background: var(--accent); border-radius: inherit; transition: width .5s cubic-bezier(.2,.8,.2,1); }
+.count { font: 500 .78rem/1 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* ---- hero ---- */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; padding-block: 36px 12px; align-items: center; }
+.hero h1 { font-weight: 800; font-size: clamp(2.1rem, 6vw, 3.5rem); margin-block: 14px 18px; }
+.lede { font-size: clamp(1.08rem, 2.2vw, 1.28rem); max-width: 34em; color: var(--fg); }
+.chips { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.chips li { font: 500 .8rem/1 var(--font-mono); padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
+.cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font: 700 .95rem/1 var(--font-body); padding: 14px 20px; border-radius: 999px; border: 2px solid transparent; background: var(--accent); color: var(--on-accent); text-decoration: none; cursor: pointer; transition: transform .15s; }
+.btn:hover { transform: translateY(-2px); }
+.btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
+.btn.small { padding: 10px 14px; font-size: .86rem; }
+
+.stage { background: var(--stage); color: var(--stage-ink); border-radius: 30px; position: relative; overflow: hidden; }
+.hero-stage { padding: 22px 16px 18px; display: grid; gap: 14px; justify-items: center; }
+.phones { display: flex; justify-content: center; align-items: flex-start; width: 100%; }
+.phones svg.phone { width: min(100%, 330px); height: auto; display: block; flex: none; overflow: visible; }
+@media (max-width: 859px) {
+  .phones svg.phone.p-back { display: none; }
+  .hero-stage[data-view="back"] .phones svg.phone.p-front { display: none; }
+  .hero-stage[data-view="back"] .phones svg.phone.p-back { display: block; }
+}
+.stage-ui { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; justify-content: center; }
+.swatches { display: flex; gap: 10px; }
+.sw { width: 40px; height: 40px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; position: relative;
+  background: radial-gradient(circle at 32% 28%, #fff 0 8%, var(--sw-l) 9% 30%, var(--sw-s) 55%, var(--sw-d) 100%);
+  box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.7), 0 4px 10px rgba(23,18,59,.18); transition: transform .15s; }
+.sw:hover { transform: scale(1.08); }
+.sw[aria-pressed="true"] { outline: 3px solid var(--stage-ink); outline-offset: 3px; }
+.sw[data-cw="ice"]   { --sw-l: #b6e5ff; --sw-s: #2f9cf0; --sw-d: #0a58b8; }
+.sw[data-cw="grape"] { --sw-l: #d6c8ff; --sw-s: #7c4dff; --sw-d: #3a1aa8; }
+.sw[data-cw="kiwi"]  { --sw-l: #ecffa6; --sw-s: #9be21b; --sw-d: #4f8a00; }
+.sw[data-cw="gum"]   { --sw-l: #ffc9ea; --sw-s: #ff3fa8; --sw-d: #a80f5e; }
+.sw[data-cw="ghost"] { --sw-l: #ffffff; --sw-s: #cfe3f1; --sw-d: #6f8aa0; }
+.seg { display: inline-flex; border: 1.5px solid color-mix(in srgb, var(--stage-ink) 35%, transparent); border-radius: 999px; padding: 3px; gap: 2px; }
+.seg button { font: 700 .82rem/1 var(--font-body); border: 0; background: transparent; color: var(--stage-ink); padding: 9px 14px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--stage-ink); color: var(--stage); }
+.stage-cap { font: 500 .8rem/1.4 var(--font-mono); text-align: center; color: var(--stage-ink); max-width: 30em; }
+.stage-cap b { font-family: var(--font-display); font-weight: 700; font-size: .9rem; letter-spacing: 0; }
+.toc { display: flex; flex-wrap: wrap; gap: 8px; padding-block: 18px 8px; }
+.toc a { font: 500 .78rem/1 var(--font-mono); letter-spacing: .04em; padding: 9px 13px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); color: var(--fg); text-decoration: none; }
+.toc a:hover { border-color: var(--accent); }
+
+/* ---- sections ---- */
+section.sec { padding-block: 64px 8px; }
+.sec-head { display: grid; gap: 12px; margin-bottom: 26px; max-width: 46rem; }
+.sec-head h2 { font-weight: 700; font-size: clamp(1.55rem, 4.2vw, 2.35rem); }
+.sec-head p { color: var(--muted); font-size: 1.06rem; }
+
+/* today / next card */
+.today { margin-top: 30px; border-radius: var(--radius); border: 1.5px solid var(--accent); background: var(--surface); padding: 22px; display: grid; gap: 14px; position: relative; }
+.today-tag { justify-self: start; }
+.today h2 { font-size: clamp(1.25rem, 3.4vw, 1.75rem); font-weight: 700; }
+.today .help { display: grid; gap: 10px; max-width: 46rem; }
+.today .help ol, .today .help ul { margin: 0; padding-left: 1.25em; display: grid; gap: 6px; }
+.today-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.today .tiny { font: 500 .78rem/1.3 var(--font-mono); color: var(--muted); }
+
+/* reality list */
+.reality { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); }
+.reality li { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; display: grid; gap: 8px; align-content: start; }
+.reality h3, .alert h3, .note h3, .linkcard h3 { line-height: 1.25; }
+.reality h3 { font-size: 1.02rem; font-weight: 600; }
+.reality p { color: var(--muted); font-size: .98rem; }
+.pill { justify-self: start; font: 500 .7rem/1 var(--font-mono); letter-spacing: .1em; padding: 6px 9px; border-radius: 999px; text-transform: uppercase; }
+.pill.easy { background: var(--ok-bg); color: var(--ok); }
+.pill.doable { background: var(--info-bg); color: var(--info); }
+.pill.hard { background: var(--warn-bg); color: var(--warn); }
+.pill.boss { background: var(--bad-bg); color: var(--bad); }
+
+/* anatomy */
+.anatomy { display: grid; gap: 22px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.xstage { padding: 18px 12px 14px; display: grid; gap: 10px; justify-items: center; }
+.xstage svg.exploded { width: min(100%, 560px); height: auto; display: block; overflow: visible; }
+.xbar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.organs { display: grid; gap: 10px; }
+.organ { text-align: left; font: inherit; color: inherit; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; cursor: pointer; display: grid; gap: 6px; transition: border-color .15s, transform .15s; }
+.organ:hover { border-color: var(--accent); }
+.organ[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+.organ h3 { font-size: .98rem; font-weight: 700; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.organ .sub { font: 500 .72rem/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.organ dl { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; font-size: .94rem; }
+.organ dt { font: 500 .72rem/1.7 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.organ dd { margin: 0; }
+
+/* model section */
+.model { display: grid; gap: 22px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.turn { padding: 16px; display: grid; gap: 10px; justify-items: center; }
+.turn-view { position: relative; width: min(100%, 420px); aspect-ratio: 560 / 760; touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; }
+.turn-view:active { cursor: grabbing; }
+.turn-view img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; -webkit-user-drag: none; pointer-events: none; }
+.turn-view img.on { opacity: 1; }
+.turn-hint { font: 500 .78rem/1.3 var(--font-mono); color: var(--stage-ink); }
+.facts { display: grid; gap: 10px; }
+.fact { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 4px; }
+.fact b { font: 600 .74rem/1.3 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.shots { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); margin-top: 18px; }
+.shots figure { margin: 0; border-radius: 22px; overflow: hidden; background: var(--stage); }
+.shots img { display: block; width: 100%; height: auto; }
+.shots figcaption { font: 500 .78rem/1.35 var(--font-mono); color: var(--stage-ink); padding: 8px 14px 14px; }
+
+/* plan */
+.stages { display: grid; gap: 16px; }
+.stage-card { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+.stage-card > summary { list-style: none; display: block; cursor: pointer; }
+.stage-sum { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 18px 20px; }
+.stage-end { display: inline-flex; align-items: center; gap: 12px; }
+.stage-card > summary::-webkit-details-marker { display: none; }
+.stage-card .num { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: var(--accent); color: var(--on-accent); font: 800 1.1rem/1 var(--font-display); }
+.stage-card h3 { font-size: 1.12rem; font-weight: 700; }
+.stage-card .meta { font: 500 .76rem/1.4 var(--font-mono); color: var(--muted); margin-top: 6px; display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.stage-card .prog { font: 500 .8rem/1 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stage-card .chev { display: inline-block; width: 10px; height: 10px; border-right: 2.5px solid var(--muted); border-bottom: 2.5px solid var(--muted); transform: rotate(45deg) translate(-2px, -2px); transition: transform .2s; }
+.stage-card[open] .chev { transform: rotate(-135deg) translate(-2px, -2px); }
+.stage-body { padding: 4px 20px 22px; display: grid; gap: 14px; border-top: 1px dashed var(--line); }
+.done-when { margin-top: 16px; padding: 12px 14px; border-radius: 12px; background: var(--surface-2); font-size: .98rem; }
+.done-when b { font: 600 .72rem/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; margin-right: 8px; color: var(--muted); }
+ul.tasks { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+ul.tasks li { border-radius: 14px; border: 1px solid transparent; }
+ul.tasks li.is-next { border-color: var(--accent); background: var(--surface-2); background: color-mix(in srgb, var(--accent) 12%, var(--surface)); }
+.task { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; align-items: start; padding: 10px 12px 2px; cursor: pointer; }
+.task input { appearance: none; -webkit-appearance: none; width: 26px; height: 26px; margin: 0; border-radius: 9px; border: 2px solid var(--muted); background: var(--surface); display: grid; place-items: center; cursor: pointer; flex: none; }
+.task input:checked { background: var(--accent); border-color: var(--accent); }
+.task input:checked::after { content: ""; width: 7px; height: 13px; border: solid var(--on-accent); border-width: 0 3px 3px 0; transform: rotate(45deg) translate(-1px, -1px); }
+.task .t { font-weight: 700; display: block; }
+.task .d { display: block; color: var(--muted); font-size: .96rem; margin-top: 2px; }
+ul.tasks li.is-done .t { text-decoration: line-through; text-decoration-thickness: 2px; opacity: .6; }
+ul.tasks li.is-done .d { opacity: .6; }
+.task-more { margin: 0 12px 8px 52px; font-size: .96rem; }
+.task-more > summary { cursor: pointer; font: 500 .74rem/1.2 var(--font-mono); letter-spacing: .06em; color: var(--muted); width: max-content; padding: 2px 0 4px; }
+.task-more > summary:hover { color: var(--fg); }
+.task-help { display: grid; gap: 8px; padding: 6px 0 4px; max-width: 44rem; }
+.task-help ol, .task-help ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+.task-help .tiny, .tiny { font: 500 .78rem/1.4 var(--font-mono); color: var(--muted); }
+.tag-next { font: 500 .66rem/1 var(--font-mono); letter-spacing: .1em; padding: 4px 7px; border-radius: 999px; background: var(--accent); color: var(--on-accent); margin-left: 8px; vertical-align: .1em; }
+
+/* shopping + links */
+.shop { display: grid; gap: 8px; }
+.shop-row { display: grid; gap: 4px 18px; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.5fr) 150px 92px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 13px 16px; }
+.shop-row .p { font-weight: 700; }
+.shop-row .w { color: var(--muted); font-size: .96rem; }
+.shop-row .c { font: 500 .86rem/1.2 var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }
+.shop-head { font: 500 .7rem/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 0 16px; display: grid; gap: 4px 18px; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.5fr) 150px 92px; margin-bottom: 8px; }
+.shop-total { font: 500 .9rem/1.4 var(--font-mono); padding: 10px 16px; display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: space-between; align-items: center; }
+.linkgrid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+.linkcard { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; display: grid; gap: 10px; align-content: start; }
+.linkcard h3 { font-size: .98rem; font-weight: 700; }
+.linkcard ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.linkcard li { display: grid; gap: 1px; }
+.linkcard li span { color: var(--muted); font-size: .9rem; }
+
+/* alerts */
+.alerts { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); }
+.alert { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px 18px; display: grid; gap: 8px; align-content: start; }
+.alert .flag { font: 500 .7rem/1 var(--font-mono); letter-spacing: .12em; color: var(--bad); text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+.alert .flag svg { width: 16px; height: 16px; flex: none; }
+.alert h3 { font-size: 1.02rem; font-weight: 600; }
+.alert p { color: var(--muted); font-size: .98rem; }
+.alert p b { color: var(--fg); }
+
+/* design notes + parking + questions */
+.notes { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); }
+.note { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; display: grid; gap: 6px; align-content: start; }
+.note h3 { font-size: .98rem; font-weight: 700; }
+.note p { color: var(--muted); font-size: .98rem; }
+.park { display: flex; flex-wrap: wrap; gap: 8px; }
+.park span { font: 500 .84rem/1 var(--font-mono); padding: 10px 14px; border-radius: 999px; border: 1.5px dashed var(--muted); color: var(--muted); }
+.qs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; counter-reset: q; }
+.qs li { counter-increment: q; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px 16px 62px; position: relative; }
+.qs li::before { content: counter(q); position: absolute; left: 16px; top: 14px; width: 32px; height: 32px; border-radius: 10px; background: var(--accent); color: var(--on-accent); display: grid; place-items: center; font: 800 .95rem/1 var(--font-display); }
+.qs b { display: block; }
+.qs span { color: var(--muted); }
+footer.foot { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line); display: grid; gap: 14px; color: var(--muted); font-size: .94rem; }
+footer.foot ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+footer.foot .fine { font: 500 .78rem/1.5 var(--font-mono); }
+
+@media (min-width: 860px) {
+  .hero { grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr); gap: 40px; }
+  .hero-stage { padding: 26px 22px 22px; }
+  .phones { gap: 0; padding-inline: 4px; }
+  .phones svg.phone { width: 57%; max-width: 360px; }
+  .phones svg.phone.p-front { transform: rotate(-3deg); margin-right: -7%; position: relative; z-index: 1; }
+  .phones svg.phone.p-back { transform: rotate(3.5deg) translateY(5%); }
+  .hero-stage .view-toggle { display: none; }
+  .anatomy { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
+  .xstage { position: sticky; top: 84px; }
+  .model { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .organs { max-height: none; }
+}
+@media (max-width: 640px) {
+  .nextbar-in { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .nextbar-in .meter { display: none; }
+  .top-meta { display: none; }
+  .shop-row, .shop-head { grid-template-columns: minmax(0, 1fr) auto; }
+  .shop-head { display: none; }
+  .shop-row .w { grid-column: 1 / -1; order: 3; }
+  .stage-sum { grid-template-columns: auto minmax(0, 1fr); }
+  .stage-end { grid-column: 2; justify-self: start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* ===== generated art styles ===== */
+{{ART_CSS}}
+</style>
+
+<div class="wrap top" id="top">
+  <a class="brand" href="#top" aria-label="Sheer, back to top"><span class="brand-mark" aria-hidden="true"></span>SHEER</a>
+  <span class="top-meta">working title · concept v0.1 · 26 Oct 2026</span>
+</div>
+
+<div class="nextbar" id="nextbar">
+  <div class="wrap nextbar-in">
+    <span class="next-pill">NEXT UP</span>
+    <a class="next-text" id="next-text" href="#today">Pick your colorway</a>
+    <span class="meter" role="progressbar" aria-label="Overall progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="meter"><span class="meter-fill" id="meter-fill"></span></span>
+    <span class="count" id="meter-count">0/0</span>
+  </div>
+</div>
+
+<main class="wrap">
+  <section class="hero" aria-labelledby="h1">
+    <div class="hero-copy">
+      <p class="eyebrow">See-through phone · concept v0.1</p>
+      <h1 id="h1">A phone with nothing to hide.</h1>
+      <p class="lede">SHEER is a clear, jelly-tinted phone with a real QWERTY keyboard, a headphone jack and a SIM tray. This page has the design, how the tech fits together, a printable model, and a plan to actually build it. Linux first, Android later.</p>
+      <ul class="chips" aria-label="Key features">
+        <li>3.5 mm headphone jack</li><li>Physical QWERTY</li><li>Nano-SIM + microSD</li><li>4G LTE</li><li>USB-C</li><li>Tinted clear shell</li>
+      </ul>
+      <div class="cta">
+        <a class="btn" href="#today">Do this next</a>
+        <a class="btn ghost" href="#plan">See the whole plan</a>
+      </div>
+    </div>
+
+    <div class="stage hero-stage" id="hero-stage" data-view="front">
+      <div class="phones">
+        {{ART_HERO_FRONT}}
+        {{ART_HERO_BACK}}
+      </div>
+      <div class="stage-ui">
+        <div class="swatches" role="group" aria-label="Colorway">
+          <button class="sw" data-cw="ice" aria-pressed="true"><span class="sr">Ice Pop</span></button>
+          <button class="sw" data-cw="grape" aria-pressed="false"><span class="sr">Grape Soda</span></button>
+          <button class="sw" data-cw="kiwi" aria-pressed="false"><span class="sr">Kiwi</span></button>
+          <button class="sw" data-cw="gum" aria-pressed="false"><span class="sr">Bubblegum</span></button>
+          <button class="sw" data-cw="ghost" aria-pressed="false"><span class="sr">Ghost</span></button>
+        </div>
+        <div class="seg view-toggle" role="group" aria-label="View">
+          <button data-view="front" aria-pressed="true">Front</button>
+          <button data-view="back" aria-pressed="false">Back</button>
+        </div>
+      </div>
+      <p class="stage-cap" id="cw-cap"><b>Ice Pop</b><br>Clear-blue controller energy. Yellow battery turns green behind it.</p>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Sections">
+    <a href="#today">Next up</a><a href="#reality">Reality check</a><a href="#anatomy">Anatomy</a><a href="#model">3D model</a><a href="#plan">Plan</a><a href="#shopping">Shopping</a><a href="#links">Links</a><a href="#alerts">Bullshit alerts</a><a href="#design">Design notes</a><a href="#questions">Questions</a>
+  </nav>
+
+  <section class="today" id="today" aria-live="polite">
+    <span class="next-pill today-tag" id="today-tag">NEXT UP · STAGE 0</span>
+    <h2 id="today-title">Pick your colorway</h2>
+    <div class="help" id="today-help"></div>
+    <div class="today-actions">
+      <button class="btn" id="today-done" type="button">Done, next one</button>
+      <span class="tiny" id="today-count"></span>
+    </div>
+  </section>
+
+  <section class="sec" id="reality">
+    <div class="sec-head">
+      <p class="eyebrow">The reality check</p>
+      <h2>Can we actually build this?</h2>
+      <p>Yes, in stages. Here is every requirement you gave me, rated honestly. The hard parts are marked so they don't ambush you later.</p>
+    </div>
+    <ul class="reality">
+      <li><span class="pill easy">Easy</span><h3>Headphone jack</h3><p>An audio chip and a 3.5 mm socket. Clicks' Communicator reportedly has one and the official Unihertz Titan 2 page says it has none, so yours is a feature, not a fossil.</p></li>
+      <li><span class="pill doable">Doable</span><h3>Physical keyboard</h3><p>A custom key board with small switches under clear keycaps. The keyboard-nerd world already has the tools: KiCad, QMK firmware and a very good PCB guide.</p></li>
+      <li><span class="pill doable">Doable</span><h3>SIM card</h3><p>Buy a 4G modem module that already has a SIM socket. Do not design the radio yourself. Ever.</p></li>
+      <li><span class="pill doable">Doable</span><h3>Linux</h3><p>Runs on cheap boards today, and phone-ready Linux exists (postmarketOS, Mobian). You will have a working prototype months sooner than with Android.</p></li>
+      <li><span class="pill hard">Hard</span><h3>Android</h3><p>Needs a chip maker's board package. The Play Store needs Google's licence, which takes months. Start Linux, run Android apps with Waydroid, or use an Android module later.</p></li>
+      <li><span class="pill doable">Doable</span><h3>See-through 90s shell</h3><p>Clear resin prints for prototypes. Injection-moulded tinted polycarbonate for the real thing. Tint beats perfectly clear (see the alerts).</p></li>
+      <li><span class="pill boss">Boss fight</span><h3>Voice calls on your own hardware</h3><p>Some carriers only let approved phones make calls over 4G (VoLTE). Texts and data come first, calls second, and your country decides how hard it gets.</p></li>
+      <li><span class="pill boss">Boss fight</span><h3>Selling it</h3><p>A radio device needs legal certification (FCC, CE and friends) plus carrier tests. Think tens of thousands. Pre-certified modules shrink the bill but do not erase it.</p></li>
+    </ul>
+  </section>
+
+  <section class="sec" id="anatomy">
+    <div class="sec-head">
+      <p class="eyebrow">How the tech fits together</p>
+      <h2>A phone is seven organs in a trench coat.</h2>
+      <p>Tap an organ to light up its layer. Press Explode to pull the stack apart. Every layer is drawn from the same dimensions as the printable model below.</p>
+    </div>
+    <div class="anatomy">
+      <div class="stage xstage" id="xstage">
+        {{ART_EXPLODED}}
+        <div class="xbar">
+          <button class="btn small" id="explode-btn" type="button" aria-pressed="true">Assemble</button>
+          <button class="btn small ghost" id="clear-pick" type="button" hidden>Show all layers</button>
+        </div>
+      </div>
+      <div class="organs" id="organs">
+        <button class="organ" type="button" aria-pressed="false" data-layers="main"><h3>Brain <span class="sub">the computer</span></h3>
+          <dl><dt>Now</dt><dd>Raspberry Pi 4, running Linux on your desk.</dd><dt>Product</dt><dd>One small board: a Pi-style compute module, or an Android smart module like Quectel's SC200R.</dd></dl></button>
+        <button class="organ" type="button" aria-pressed="false" data-layers="main"><h3>Radio <span class="sub">4G + SIM</span></h3>
+          <dl><dt>Now</dt><dd>Waveshare SIM7600G-H 4G HAT with a SIM slot and GPS.</dd><dt>Product</dt><dd>A 4G module with a nano-SIM socket and a flex antenna. Buy it certified.</dd></dl></button>
+        <button class="organ" type="button" aria-pressed="false" data-layers="main"><h3>Voice <span class="sub">audio + jack</span></h3>
+          <dl><dt>Now</dt><dd>The Pi 4's own 3.5 mm jack, plus the audio jack on the 4G HAT for calls.</dd><dt>Product</dt><dd>An audio codec chip, a headset-capable jack, a speaker and a mic.</dd></dl></button>
+        <button class="organ" type="button" aria-pressed="false" data-layers="display"><h3>Eyes <span class="sub">the screen</span></h3>
+          <dl><dt>Now</dt><dd>Raspberry Pi Touch Display 2, 5 inch, 720 × 1280.</dd><dt>Product</dt><dd>A square ~3.5 inch panel, BlackBerry-style, with a flex cable to the board.</dd></dl></button>
+        <button class="organ" type="button" aria-pressed="false" data-layers="kbd"><h3>Fingers <span class="sub">the keyboard</span></h3>
+          <dl><dt>Now</dt><dd>Any USB mini keyboard, plus a used BlackBerry Q10 as the feel reference.</dd><dt>Product</dt><dd>Your own keyboard board, backlit, with clear keycaps. QMK firmware makes it a normal keyboard.</dd></dl></button>
+        <button class="organ" type="button" aria-pressed="false" data-layers="batt"><h3>Heart <span class="sub">power</span></h3>
+          <dl><dt>Now</dt><dd>A USB-C power bank.</dd><dt>Product</dt><dd>A ~3000 mAh LiPo pouch, a charger chip and a fuel gauge. The yellow label is the look.</dd></dl></button>
+        <button class="organ" type="button" aria-pressed="false" data-layers="front,back"><h3>Skin <span class="sub">the see-through shell</span></h3>
+          <dl><dt>Now</dt><dd>Clear resin prints, polished by hand.</dd><dt>Product</dt><dd>Injection-moulded tinted polycarbonate, two halves and four screws.</dd></dl></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="model">
+    <div class="sec-head">
+      <p class="eyebrow">The printable model · v0.1</p>
+      <h2>Hold the idea in your hand.</h2>
+      <p>This is a looks-like model: the right size and shape with fake guts. Print the two clear shells, tuck the dummy parts inside, and you can feel whether 70 × 120 × 15 mm is right. It is sized around placeholder parts, so expect to tweak it once real parts arrive.</p>
+    </div>
+    <div class="model">
+      <div class="stage turn">
+        <div class="turn-view" id="turn" role="img" aria-label="Rotatable preview of the printable SHEER model. Drag left or right to spin it.">
+          {{TURN_IMGS}}
+        </div>
+        <p class="turn-hint">Drag to spin the actual CAD model</p>
+      </div>
+      <div class="facts">
+        <div class="fact"><b>Size</b><span>70 × 120 × 15 mm, 2.6 mm walls, 10 mm corners. Chunky on purpose.</span></div>
+        <div class="fact"><b>Parts</b><span>Front shell with raised keys, back shell with screw posts, and four dummy parts: screen, mainboard, battery, keyboard board.</span></div>
+        <div class="fact"><b>Cut-outs</b><span>3.5 mm jack (top), USB-C and speaker/mic holes (bottom), SIM + microSD slot (right), volume and power nubs.</span></div>
+        <div class="fact"><b>Checked</b><span>Every mesh is watertight and no part collides with another. Four M2 × 12 screws close it.</span></div>
+        <div class="fact"><b>Not in v0.1</b><span>Strap loop, a real screen opening, snap-on back covers. Those come once real parts are measured.</span></div>
+        <div class="fact"><b>Print it</b><span>Ask for clear or transparent SLA resin, polished front and back faces, one of each shell. The files are attached in chat and live in the repo under <span class="mono">cad/</span>.</span></div>
+      </div>
+    </div>
+    <div class="shots">
+      <figure><img src="img/cad_front.jpg" alt="Front three-quarter render of the printable model in blue resin"><figcaption>Front: raised keys, glass seat, D-pad</figcaption></figure>
+      <figure><img src="img/cad_back.jpg" alt="Back render showing the dummy mainboard, battery and four screws through the clear shell"><figcaption>Back: guts on display, four screws</figcaption></figure>
+      <figure><img src="img/cad_exploded.jpg" alt="Exploded render of the model: front shell, keyboard board, display, mainboard, battery, back shell"><figcaption>Exploded: six printable parts</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="sec" id="plan">
+    <div class="sec-head">
+      <p class="eyebrow">The plan</p>
+      <h2>Five stages, one small step at a time.</h2>
+      <p>Only Stage 0 and 1 are open, because staring at Stage 4 on day one is how plans die. Tick things off and the bar at the top always shows your single next thing. Money and time are rough ballparks.</p>
+    </div>
+    <div class="stages" id="stages">
+{{STAGES}}
+    </div>
+  </section>
+
+  <section class="sec" id="shopping">
+    <div class="sec-head">
+      <p class="eyebrow">Stage 1 shopping list</p>
+      <h2>The desk Frankenphone.</h2>
+      <p>No custom boards and almost no soldering. This proves the SIM, the keyboard, the screen and the jack work together before any money goes into a real design. Prices are rough, so check the live listing.</p>
+    </div>
+    <div class="shop-head" aria-hidden="true"><span>Part</span><span>Why this one</span><span>≈ Price</span><span>Buy</span></div>
+    <div class="shop" id="shop">
+{{SHOP}}
+    </div>
+    <div class="shop-total"><span>Rough total with SIM: <b>$250 to $400</b></span><button class="btn small ghost" id="copy-list" type="button">Copy list as text</button></div>
+  </section>
+
+  <section class="sec" id="links">
+    <div class="sec-head">
+      <p class="eyebrow">Where to make things</p>
+      <h2>Websites for every stage.</h2>
+      <p>Most of these came straight out of my research. I can't open every site from where I work, so if one is dead, tell me and I'll swap it. Prices and options change, so treat each as a starting point.</p>
+    </div>
+    <div class="linkgrid">
+{{LINKS}}
+    </div>
+  </section>
+
+  <section class="sec" id="alerts">
+    <div class="sec-head">
+      <p class="eyebrow">Bullshit alerts</p>
+      <h2>The stuff that eats months.</h2>
+      <p>Hardware dreams usually die in the same few places. I'd rather you hear it from me now.</p>
+    </div>
+    <div class="alerts">
+{{ALERTS}}
+    </div>
+  </section>
+
+  <section class="sec" id="design">
+    <div class="sec-head">
+      <p class="eyebrow">Design notes</p>
+      <h2>Choices I made for you.</h2>
+      <p>Say the word and I'll change any of them.</p>
+    </div>
+    <div class="notes">
+{{NOTES}}
+    </div>
+    <div class="sec-head" style="margin-top:44px">
+      <p class="eyebrow">Parking lot</p>
+      <h2>Good ideas that have to wait.</h2>
+      <p>Writing them down so your brain can let go. None of these block Stage 1.</p>
+    </div>
+    <div class="park" aria-label="Ideas for later">
+      <span>camera</span><span>NFC</span><span>wireless charging</span><span>IR remote blaster</span><span>FM radio</span><span>eSIM</span><span>MiniDisc-style music app</span><span>glow-in-the-dark shell</span><span>e-ink back screen</span><span>strap loop + charm</span><span>swap-on jelly covers</span>
+    </div>
+  </section>
+
+  <section class="sec" id="questions">
+    <div class="sec-head">
+      <p class="eyebrow">Your turn</p>
+      <h2>Three things I need from you.</h2>
+      <p>Answer in chat. One line each is plenty.</p>
+    </div>
+    <ol class="qs">
+      <li><b>Where are you, and which carrier?</b><span>Country decides the modem bands, whether voice calls are realistic, and which certification you would eventually need.</span></li>
+      <li><b>What is your budget and pace?</b><span>"$100 a month for three months" and "weekend project" lead to different plans.</span></li>
+      <li><b>What can you already do?</b><span>Soldering, CAD, coding, or none of it. It decides how much I handle for you.</span></li>
+    </ol>
+  </section>
+
+  <footer class="foot">
+    <p>Numbers, prices and timelines are rough estimates from vendor pages, forum threads and blog posts, not quotes. Certification and carrier rules vary by country. Get real quotes before spending.</p>
+    <p class="eyebrow">Sources used while building this</p>
+    <ul>
+{{SOURCES}}
+    </ul>
+    <p class="fine">Made from the model and art files in the retro-phone repo: cad/sheer_v01.py and design/art.py.</p>
+  </footer>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var root = document.documentElement;
+
+  /* ---------- colorway + view ---------- */
+  var CW = {
+    ice:   ["Ice Pop", "Clear-blue controller energy. The yellow battery turns green behind it."],
+    grape: ["Grape Soda", "Atomic-purple handheld mood. Backlit keys glow through the jelly."],
+    kiwi:  ["Kiwi", "Highlighter lime. Loud on purpose."],
+    gum:   ["Bubblegum", "Hot-pink Y2K. The notification light glows cyan."],
+    ghost: ["Ghost", "Almost clear. Every wire on show, nothing to hide."]
+  };
+  var stage = $("#hero-stage");
+  function setCw(k) {
+    if (!CW[k]) return;
+    root.setAttribute("data-cw", k);
+    $$(".sw").forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.cw === k ? "true" : "false"); });
+    $("#cw-cap").innerHTML = "<b>" + CW[k][0] + "</b><br>" + CW[k][1];
+    try { localStorage.setItem("sheer-cw", k); } catch (e) {}
+  }
+  $$(".sw").forEach(function (b) { b.addEventListener("click", function () { setCw(b.dataset.cw); }); });
+  $$(".view-toggle button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      stage.setAttribute("data-view", b.dataset.view);
+      $$(".view-toggle button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    });
+  });
+  var saved = "ice";
+  try { saved = localStorage.getItem("sheer-cw") || "ice"; } catch (e) {}
+  setCw(CW[saved] ? saved : "ice");
+
+  /* ---------- exploded view ---------- */
+  var ex = $("svg.exploded");
+  var exBtn = $("#explode-btn");
+  var clearBtn = $("#clear-pick");
+  function setFlat(flat) {
+    ex.classList.toggle("is-flat", flat);
+    exBtn.textContent = flat ? "Explode" : "Assemble";
+    exBtn.setAttribute("aria-pressed", flat ? "false" : "true");
+  }
+  exBtn.addEventListener("click", function () { setFlat(!ex.classList.contains("is-flat")); });
+  var picked = [];
+  function pick(layers) {
+    picked = layers;
+    ex.classList.toggle("has-pick", layers.length > 0);
+    $$(".xl", ex).forEach(function (g) { g.classList.toggle("is-pick", layers.indexOf(g.dataset.layer) > -1); });
+    clearBtn.hidden = layers.length === 0;
+    $$(".organ").forEach(function (o) {
+      var l = o.dataset.layers.split(",");
+      o.setAttribute("aria-pressed", layers.length && l.join() === layers.join() && o.dataset.on === "1" ? "true" : "false");
+    });
+  }
+  $$(".organ").forEach(function (o) {
+    o.addEventListener("click", function () {
+      var on = o.getAttribute("aria-pressed") === "true";
+      $$(".organ").forEach(function (x) { x.dataset.on = "0"; });
+      if (on) { pick([]); return; }
+      if (ex.classList.contains("is-flat")) setFlat(false);
+      o.dataset.on = "1";
+      pick(o.dataset.layers.split(","));
+    });
+  });
+  clearBtn.addEventListener("click", function () { $$(".organ").forEach(function (x) { x.dataset.on = "0"; }); pick([]); });
+  $$(".xl", ex).forEach(function (g) {
+    function go() {
+      var id = g.dataset.layer;
+      var target = $$(".organ").filter(function (o) { return o.dataset.layers.split(",").indexOf(id) > -1; })[0];
+      if (target) target.click();
+    }
+    g.addEventListener("click", go);
+    g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+  });
+
+  /* ---------- turntable ---------- */
+  var tv = $("#turn");
+  if (tv) {
+    var frames = $$("img", tv), n = frames.length, cur = 0, dragging = false, sx = 0, sf = 0, timer = null, touched = false;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var show = function (i) { i = ((i % n) + n) % n; if (i === cur) return; frames[cur].classList.remove("on"); frames[i].classList.add("on"); cur = i; };
+    if (n) frames[0].classList.add("on");
+    var stop = function () { if (timer) { clearInterval(timer); timer = null; } };
+    Promise.all(frames.map(function (f) { return f.decode ? f.decode().catch(function () {}) : Promise.resolve(); })).then(function () {
+      if (reduce || !("IntersectionObserver" in window)) return;
+      var io = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting || touched) return;
+        io.disconnect();
+        var k = 0;
+        timer = setInterval(function () { show(cur - 1); if (++k >= n) stop(); }, 90);
+      }, { threshold: .6 });
+      io.observe(tv);
+    });
+    tv.addEventListener("pointerdown", function (e) { touched = true; dragging = true; sx = e.clientX; sf = cur; stop(); try { tv.setPointerCapture(e.pointerId); } catch (x) {} });
+    tv.addEventListener("pointermove", function (e) { if (!dragging) return; show(sf - Math.round((e.clientX - sx) / (tv.clientWidth / n * 1.6))); });
+    ["pointerup", "pointercancel"].forEach(function (t) { tv.addEventListener(t, function () { dragging = false; }); });
+    tv.tabIndex = 0;
+    tv.addEventListener("keydown", function (e) { if (e.key === "ArrowLeft") { touched = true; stop(); show(cur + 1); } if (e.key === "ArrowRight") { touched = true; stop(); show(cur - 1); } });
+  }
+
+  /* ---------- checklist: remembers ticks (db), falls back to this browser ---------- */
+  var boxes = $$("input.task-box");
+  var state = {};
+  var LS = "sheer-progress-v1";
+  try { var raw = localStorage.getItem(LS); if (raw) state = JSON.parse(raw) || {}; } catch (e) { state = {}; }
+
+  function firstOpen() { for (var i = 0; i < boxes.length; i++) if (!state[boxes[i].dataset.id]) return boxes[i]; return null; }
+  function render() {
+    var total = boxes.length, done = 0;
+    boxes.forEach(function (b) { var on = !!state[b.dataset.id]; b.checked = on; if (on) done++; b.closest("li").classList.toggle("is-done", on); });
+    var nx = firstOpen();
+    $$("ul.tasks li").forEach(function (li) { li.classList.remove("is-next"); var t = $(".tag-next", li); if (t) t.remove(); });
+    $$(".stage-card").forEach(function (card) {
+      var bs = $$("input.task-box", card), d = bs.filter(function (b) { return state[b.dataset.id]; }).length;
+      $(".prog", card).textContent = d + "/" + bs.length;
+    });
+    var pct = total ? Math.round(done / total * 100) : 0;
+    $("#meter-fill").style.width = pct + "%";
+    $("#meter").setAttribute("aria-valuenow", String(pct));
+    $("#meter-count").textContent = done + "/" + total;
+    if (nx) {
+      var li = nx.closest("li"); li.classList.add("is-next");
+      var tt = $(".t", li); var tag = document.createElement("span"); tag.className = "tag-next"; tag.textContent = "NEXT"; tt.appendChild(tag);
+      var title = tt.firstChild.textContent;
+      $("#next-text").textContent = title;
+      $("#today-title").textContent = title;
+      $("#today-tag").textContent = "NEXT UP · " + nx.closest(".stage-card").dataset.short;
+      $("#today-help").innerHTML = ($(".task-help", li) || {}).innerHTML || "";
+      $("#today-done").hidden = false;
+      $("#today-count").textContent = (total - done) + " to go";
+    } else {
+      $("#next-text").textContent = "All steps ticked. Ask me for the next stage.";
+      $("#today-title").textContent = "Everything on this list is done.";
+      $("#today-tag").textContent = "DONE";
+      $("#today-help").innerHTML = "<p>That is a real achievement. Tell me how it went in chat and we will plan the next stage together.</p>";
+      $("#today-done").hidden = true;
+      $("#today-count").textContent = "";
+    }
+  }
+  var dbRef = null, canWrite = true, chain = Promise.resolve();
+  function persist(id, val) {
+    try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {}
+    if (!dbRef || !canWrite) return;
+    chain = chain.then(function () {
+      var patch = { done: {} }; patch.done[id] = val;
+      return dbRef.update(patch).catch(function (e) {
+        if (e && e.code === "invalid_argument") {
+          return dbRef.set({ done: JSON.parse(JSON.stringify(state)) }).catch(function () { canWrite = false; });
+        }
+      });
+    });
+  }
+  function set(id, val) { state[id] = val; render(); persist(id, val); }
+  boxes.forEach(function (b) { b.addEventListener("change", function () { set(b.dataset.id, b.checked); }); });
+  $("#today-done").addEventListener("click", function () { var nx = firstOpen(); if (nx) set(nx.dataset.id, true); });
+  render();
+
+  if (window.claude && typeof window.claude.use === "function") {
+    Promise.all([window.claude.use("db"), window.claude.use("user")]).then(function (r) {
+      var db = r[0], user = r[1];
+      if (!db) return;
+      var go = user && typeof user.can === "function" ? user.can("data.write") : Promise.resolve(null);
+      return go.then(function (w) {
+        if (w === false) canWrite = false;
+        dbRef = db.doc("progress/main");
+        dbRef.onSnapshot(function (snap) {
+          if (!snap.exists) return;
+          var remote = (snap.data() || {}).done || {};
+          Object.keys(remote).forEach(function (k) { state[k] = !!remote[k]; });
+          try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {}
+          render();
+        }, function () {});
+      });
+    }).catch(function () {});
+  }
+
+  /* ---------- copy shopping list ---------- */
+  var cp = $("#copy-list");
+  if (cp) cp.addEventListener("click", function () {
+    var lines = $$("#shop .shop-row").map(function (r) { return "- " + $(".p", r).textContent + " (" + $(".c", r).textContent + ")"; });
+    var text = "SHEER stage 1 shopping list\n" + lines.join("\n");
+    var done = function (ok) { cp.textContent = ok ? "Copied" : "Select and copy manually"; setTimeout(function () { cp.textContent = "Copy list as text"; }, 2200); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+    else done(false);
+  });
+})();
+</script>
